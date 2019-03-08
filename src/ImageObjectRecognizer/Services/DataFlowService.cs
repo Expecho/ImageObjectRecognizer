@@ -9,16 +9,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ImageMetadataUpdater.Services.TplDataFlow
+namespace ImageMetadataUpdater.Services
 {
-    internal class DataFlowUpdater : IHostedService
+    internal class DataFlowService : IHostedService
     {
-        private readonly ILogger<DataFlowUpdater> _logger;
+        private readonly ILogger<DataFlowService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private int _queuedFiles;
 
-        public DataFlowUpdater(ILogger<DataFlowUpdater> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
+        public DataFlowService(ILogger<DataFlowService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 using ImageMetadataUpdater.Models;
 using ImageMetadataUpdater.Writers;
 
-namespace ImageMetadataUpdater.Services.Tasks
+namespace ImageMetadataUpdater.Services
 {
-    internal class TaskBasedUpdater : IHostedService
+    internal class TaskBasedService : IHostedService
     {
-        private readonly ILogger<TaskBasedUpdater> _logger;
+        private readonly ILogger<TaskBasedService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private int _queuedFiles;
 
-        public TaskBasedUpdater(ILogger<TaskBasedUpdater> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
+        public TaskBasedService(ILogger<TaskBasedService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

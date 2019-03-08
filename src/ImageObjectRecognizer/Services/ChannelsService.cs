@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 using ImageMetadataUpdater.Models;
 using ImageMetadataUpdater.Writers;
 
-namespace ImageMetadataUpdater.Services.BlockingCollection
+namespace ImageMetadataUpdater.Services
 {
-    internal class ChannelsUpdater : IHostedService
+    internal class ChannelsService : IHostedService
     {
-        private readonly ILogger<ChannelsUpdater> _logger;
+        private readonly ILogger<ChannelsService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private int _queuedFiles;
         private Recognizer _recognizer;
 
-        public ChannelsUpdater(ILogger<ChannelsUpdater> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
+        public ChannelsService(ILogger<ChannelsService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

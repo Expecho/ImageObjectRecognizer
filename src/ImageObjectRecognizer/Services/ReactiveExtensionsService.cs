@@ -10,17 +10,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ImageMetadataUpdater.Services.Rx
+namespace ImageMetadataUpdater.Services
 {
-    internal class RxUpdater : IHostedService
+    internal class ReactiveExtensionsService : IHostedService
     {
-        private readonly ILogger<RxUpdater> _logger;
+        private readonly ILogger<ReactiveExtensionsService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private readonly  Subject<Input> _fileSubject = new Subject<Input>();
         private int _queuedFiles;
 
-        public RxUpdater(ILogger<RxUpdater> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
+        public ReactiveExtensionsService(ILogger<ReactiveExtensionsService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

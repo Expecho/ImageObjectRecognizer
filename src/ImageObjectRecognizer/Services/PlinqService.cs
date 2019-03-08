@@ -9,16 +9,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ImageMetadataUpdater.Services.PLinq
+namespace ImageMetadataUpdater.Services
 {
-    internal class PlinqUpdater : IHostedService
+    internal class PlinqService : IHostedService
     {
-        private readonly ILogger<PlinqUpdater> _logger;
+        private readonly ILogger<PlinqService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private int _queuedFiles;
 
-        public PlinqUpdater(ILogger<PlinqUpdater> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
+        public PlinqService(ILogger<PlinqService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

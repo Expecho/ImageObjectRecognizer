@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ImageMetadataUpdater.Services.Rx;
+using ImageMetadataUpdater.Services;
 using ImageMetadataUpdater.Writers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ImageMetadataUpdater
 {
+
     internal static class Program
     {
         public static async Task Main(string[] args)
@@ -28,9 +29,10 @@ namespace ImageMetadataUpdater
                   services.AddOptions();
                   services.Configure<Configuration>(hostContext.Configuration.GetSection("Configuration"));
 
-                  var path = hostContext.Configuration.GetSection("Configuration").Get<Configuration>().Path;
+                  var configuration = hostContext.Configuration.GetSection("Configuration").Get<Configuration>();
+
                   services.AddSingleton<IResultWriter, FileWriter>();
-                  services.AddSingleton<IHostedService, RxUpdater>();
+                  services.AddSingletonUsingTypeString<IHostedService>(configuration.Implementation);
               })
               .ConfigureLogging((hostingContext, logging) =>
               {
