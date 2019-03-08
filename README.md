@@ -19,5 +19,13 @@ The configuration can be set using the commandline or the [appsettings.json](htt
 For each processed image file a json file with the same name as the image file is created with the result of the analysis. An example output looks like this:
 
 ```json
-
+{
+  "tags": [
+    "mountain",
+    "outdoor",
+    "sky",
+    "nature"
+  ],
+  "description": "a view of a large mountain in the background"
+}
 ```
