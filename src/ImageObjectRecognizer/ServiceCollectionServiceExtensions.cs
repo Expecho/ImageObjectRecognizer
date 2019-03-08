@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,10 +26,14 @@ namespace ImageMetadataUpdater
         //     A reference to this instance after the operation has completed.
         public static IServiceCollection AddSingletonUsingTypeString<TService>(this IServiceCollection services, string typeName)
         {
-            var implementationType = Assembly.GetExecutingAssembly()
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var implementationType = assembly
                 .GetTypes()
-                .Where(t => t.GetInterface(typeof(TService).FullName) != null)
                 .FirstOrDefault(t => t.Name == typeName);
+
+            if (implementationType == null)
+                throw new ArgumentException($"Cannot find type {typeName} in assembly {assembly.FullName}", nameof(typeName));
 
             services.AddSingleton(typeof(TService), implementationType);
 
