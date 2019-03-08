@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using ImageMetadataUpdater.Services.PLinq;
+﻿using System.Threading.Tasks;
+using ImageMetadataUpdater.Services.Rx;
 using ImageMetadataUpdater.Writers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +30,7 @@ namespace ImageMetadataUpdater
 
                   var path = hostContext.Configuration.GetSection("Configuration").Get<Configuration>().Path;
                   services.AddSingleton<IResultWriter, FileWriter>();
-                  services.AddSingleton<IHostedService, PlinqUpdater>();
+                  services.AddSingleton<IHostedService, RxUpdater>();
               })
               .ConfigureLogging((hostingContext, logging) =>
               {
