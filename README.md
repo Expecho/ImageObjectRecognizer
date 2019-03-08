@@ -6,13 +6,13 @@
 
 The configuration can be set using the commandline or the [appsettings.json](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/appsettings.json) file.
 
-|Key|Description|
-|---|---|
-|SubscriptionKey|The key of the Azure Cognitive Services Resource. ([documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/vision-api-how-to-topics/howtosubscribe))| 
-|Region|The region where the Azure Cognitive Services Resource is located.|
-|Path|Full path to the local drive where the jpg files are located.|
-|ConfidenceThreshold|The minimum [confidence score](https://docs.microsoft.com/nl-nl/dotnet/api/microsoft.azure.cognitiveservices.vision.computervision.models.detectedobject.confidence?view=azure-dotnet#Microsoft_Azure_CognitiveServices_Vision_ComputerVision_Models_DetectedObject_Confidence) for an object to be included in the result set.|
-|Implementation|Name of the type that implements the service that will process the images. One of [those](https://github.com/Expecho/ImageObjectRecognizer/tree/master/src/ImageObjectRecognizer/Services).|
+|Key|Description|Default|
+|---|---|---|
+|SubscriptionKey|The key of the Azure Cognitive Services Resource. ([documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/vision-api-how-to-topics/howtosubscribe))|Empty|
+|Region|The region where the Azure Cognitive Services Resource is located.|Empty|
+|Path|Full path to the local drive where the jpg files are located.|Empty|
+|ConfidenceThreshold|The minimum [confidence score](https://docs.microsoft.com/nl-nl/dotnet/api/microsoft.azure.cognitiveservices.vision.computervision.models.detectedobject.confidence?view=azure-dotnet#Microsoft_Azure_CognitiveServices_Vision_ComputerVision_Models_DetectedObject_Confidence) for an object to be included in the result set.|0.75|
+|Implementation|Name of the type that implements the service that will process the images. One of [those](https://github.com/Expecho/ImageObjectRecognizer/tree/master/src/ImageObjectRecognizer/Services).|ReactiveExtensionsService|
 
 ## Output
 
