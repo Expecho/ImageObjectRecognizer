@@ -12,7 +12,7 @@ The configuration can be set using the commandline or the [appsettings.json](htt
 |Region|The region where the Azure Cognitive Services Resource is located.|
 |Path|Full path to the local drive where the jpg files are located.|
 |ConfidenceThreshold|The minimum [confidence score](https://docs.microsoft.com/nl-nl/dotnet/api/microsoft.azure.cognitiveservices.vision.computervision.models.detectedobject.confidence?view=azure-dotnet#Microsoft_Azure_CognitiveServices_Vision_ComputerVision_Models_DetectedObject_Confidence) for an object to be included in the result set.|
-|   |   |
+|Implementation|Name of the type that implements the service that will process the images. One of [those](https://github.com/Expecho/ImageObjectRecognizer/tree/master/src/ImageObjectRecognizer/Services).|
 
 ## Output
 
