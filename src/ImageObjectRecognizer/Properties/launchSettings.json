@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ImageMetadataUpdater": {
-      "commandName": "Project",
-      "commandLineArgs": "--SubscriptionKey 0e4b4784eeb948b891c8b1e9c5a453e8 --Region westeurope Path=\"D:\\Users\\Peter\\OneDrive\\Pictures\\Wallpapers\" --ConfidenceThreshold 0.75"
-    }
-  }
-}
