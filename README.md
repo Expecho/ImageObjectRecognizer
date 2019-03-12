@@ -2,18 +2,22 @@
 
 .Net Core Console Application that leverages the [Azure Cognitive Services Vision SDK](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/) to recognize objects in a jpg image file.
 
-The main purpose of this repository is not the tool itself, but the demonstration of several ways to call the [rate limited api](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/computer-vision/) using multithreading techniques. When calls have to be throttled backpressure has to be applied to the producer in a producer/consumer scenario. There are several implementations of the producer/consumer scenario in this repository:
+## How it works
+
+The application will loop recursively through all directories in the path specified in the configuration. It will then send them individually to the API to have them analyzed. The result is stored as json in a file created with the same name as the image in the same folder. 
+
+The main purpose of this repository is not the tool itself, but the demonstration of several ways to call the [rate limited api](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/computer-vision/) using multithreading techniques. When calls have to be throttled, backpressure has to be applied to the producer in a producer/consumer scenario. There are several implementations of the producer/consumer scenario in this repository:
+
+The current implemetations are based on the S1 pricing tier that allows for 10 calls per second to the computer vision api.
 
 |Technique|Description|
 |---|---|
-|[BlockingCollection](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/BlockingCollectionService.cs)||
-|[TPL DataFlow](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/DataFlowService.cs)||
-|[PLinq](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/PlinqService.cs)||
-|[Tasks](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/TaskBasedService.cs)||
+|[BlockingCollection](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/BlockingCollectionService.cs)|[Blocking Collections](https://docs.microsoft.com/en-us/dotnet/standard/collections/thread-safe/blockingcollection-overview) supports limiting the concurrency by creating a bounded instance.|
+|[TPL DataFlow](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/DataFlowService.cs)|[TPL Dataflow](https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/dataflow-task-parallel-library) is a good fit for this task since it allows you to create a pipeline for the process and apply concurrencly limits per step in the pipeline.|
+|[PLinq](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/PlinqService.cs)|Though [Parallel Linq](https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/parallel-linq-plinq) supports limiting the concurrency using `WithDegreeOfParallelism`, it does not work well with the async-await pattern since it does not support `Task` or `Taks<T>`.|
+|[Tasks](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/TaskBasedService.cs)|Using ` Task` or `Task<T>` does not support limiting concurrency.|
 |[Channels](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/ChannelsService.cs)||
-|[Reactive Extensions](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/ReactiveExtensionsService.cs)||
-
-The current implemetations are based on the S1 pricing tier that allows for 10 calls per second to the computer vision api.
+|[Reactive Extensions](https://github.com/Expecho/ImageObjectRecognizer/blob/master/src/ImageObjectRecognizer/Services/ReactiveExtensionsService.cs)|[Reactive Extensions](https://github.com/dotnet/reactive) is the best fit for this particular task since it can throttle based on time.|
 
 ## Cognitive Services Computer Vision API
 
