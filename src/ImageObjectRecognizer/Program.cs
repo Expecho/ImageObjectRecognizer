@@ -28,7 +28,7 @@ namespace ImageMetadataUpdater
               {
                   services.AddOptions();
                   services.Configure<Configuration>(hostContext.Configuration.GetSection("Configuration"));
-
+                  
                   var configuration = hostContext.Configuration.GetSection("Configuration").Get<Configuration>();
 
                   services.AddSingleton<IResultWriter, FileWriter>();
