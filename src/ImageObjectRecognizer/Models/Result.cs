@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
-namespace ImageMetadataUpdater.Models
+namespace ImageObjectRecognizer.Models
 {
     public class Result
     {

@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
-using ImageMetadataUpdater.Services;
-using ImageMetadataUpdater.Writers;
+using ImageObjectRecognizer.Writers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ImageMetadataUpdater
+namespace ImageObjectRecognizer
 {
 
     internal static class Program

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ImageMetadataUpdater
+namespace ImageObjectRecognizer
 {
     internal static class ServiceCollectionServiceExtensions
     {

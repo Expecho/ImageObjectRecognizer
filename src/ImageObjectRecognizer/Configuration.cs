@@ -1,4 +1,4 @@
-﻿namespace ImageMetadataUpdater
+﻿namespace ImageObjectRecognizer
 {
     public class Configuration
     {

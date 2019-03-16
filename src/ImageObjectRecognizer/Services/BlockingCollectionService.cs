@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ImageMetadataUpdater.Models;
-using ImageMetadataUpdater.Writers;
+using ImageObjectRecognizer.Models;
+using ImageObjectRecognizer.Writers;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace ImageMetadataUpdater.Services
+namespace ImageObjectRecognizer.Services
 {
     internal class BlockingCollectionService : IHostedService
     {

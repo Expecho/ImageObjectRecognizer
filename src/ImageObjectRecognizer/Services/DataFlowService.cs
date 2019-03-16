@@ -3,13 +3,13 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using ImageMetadataUpdater.Models;
-using ImageMetadataUpdater.Writers;
+using ImageObjectRecognizer.Models;
+using ImageObjectRecognizer.Writers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace ImageMetadataUpdater.Services
+namespace ImageObjectRecognizer.Services
 {
     internal class DataFlowService : IHostedService
     {

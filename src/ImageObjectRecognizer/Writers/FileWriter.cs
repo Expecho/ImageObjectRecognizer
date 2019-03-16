@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ImageMetadataUpdater.Models;
+using ImageObjectRecognizer.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace ImageMetadataUpdater.Writers
+namespace ImageObjectRecognizer.Writers
 {
     public class FileWriter : IResultWriter
     {

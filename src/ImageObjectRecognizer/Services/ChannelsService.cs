@@ -1,16 +1,15 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
+using ImageObjectRecognizer.Models;
+using ImageObjectRecognizer.Writers;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ImageMetadataUpdater.Models;
-using ImageMetadataUpdater.Writers;
-using System.Threading.Channels;
 
-namespace ImageMetadataUpdater.Services
+namespace ImageObjectRecognizer.Services
 {
     internal class ChannelsService : IHostedService
     {
@@ -32,7 +31,12 @@ namespace ImageMetadataUpdater.Services
             _recognizer = new Recognizer(_logger, _configuration);
 
             // Set up pipeline
-            var pipeline = Channel.CreateUnbounded<Input>();
+            var pipeline = Channel.CreateBounded<Input>(new BoundedChannelOptions(10)
+            {
+                FullMode = BoundedChannelFullMode.Wait,
+                SingleReader = true,
+                SingleWriter = true
+            });
 
             // Start the consumer
             var processingTask = ProcessQueuedFilesAsync(pipeline.Reader, cancellationToken);
@@ -47,20 +51,17 @@ namespace ImageMetadataUpdater.Services
             await processingTask;
         }
 
-        private Task ProcessQueuedFilesAsync(ChannelReader<Input> pipeline, CancellationToken cancellationToken)
+        private async Task ProcessQueuedFilesAsync(ChannelReader<Input> pipeline, CancellationToken cancellationToken)
         {
-            return Task.Run(async () =>
+            while (true)
             {
-                while(true)
-                {
-                    var readTask = pipeline.ReadAsync(cancellationToken).AsTask();
-                    var completedTask = await Task.WhenAny(readTask, pipeline.Completion);
-                    if (completedTask == pipeline.Completion)
-                        return;
+                var readTask = pipeline.ReadAsync(cancellationToken).AsTask();
+                var completedTask = await Task.WhenAny(readTask, pipeline.Completion);
+                if (completedTask == pipeline.Completion)
+                    return;
 
-                    await ProcessQueuedFileAsync(readTask.Result);
-                }
-            }, cancellationToken);
+                await ProcessQueuedFileAsync(readTask.Result);
+            }
         }
 
         private async Task ProcessQueuedFileAsync(Input input)
@@ -76,11 +77,15 @@ namespace ImageMetadataUpdater.Services
             return Task.CompletedTask;
         }
 
-        private async Task QueueImageFilesAsync(string path, ChannelWriter<Input> target)
+        private async ValueTask QueueImageFilesAsync(string path, ChannelWriter<Input> target)
         {
             foreach (var file in Directory.EnumerateFiles(path, "*.jpg", SearchOption.TopDirectoryOnly))
             {
-                await target.WriteAsync(new Input(file, ++_queuedFiles));
+                var input = new Input(file, ++_queuedFiles);
+
+                if (!target.TryWrite(input))
+                    await target.WriteAsync(input);
+
                 _logger.LogInformation($"Queued {file} ({_queuedFiles})");
             }
         }

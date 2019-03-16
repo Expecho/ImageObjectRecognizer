@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ImageMetadataUpdater.Models;
+using ImageObjectRecognizer.Models;
 
-namespace ImageMetadataUpdater.Writers
+namespace ImageObjectRecognizer.Writers
 {
     public interface IResultWriter
     {

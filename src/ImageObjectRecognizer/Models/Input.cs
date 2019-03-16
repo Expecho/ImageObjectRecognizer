@@ -1,4 +1,4 @@
-﻿namespace ImageMetadataUpdater.Models
+﻿namespace ImageObjectRecognizer.Models
 {
     public class Input
     {
