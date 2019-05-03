@@ -43,6 +43,7 @@ namespace ImageObjectRecognizer.Services
             var writer = new ActionBlock<Result>(async result =>
             {
                 await _resultWriter.PersistResultAsync(result);
+                _logger.LogInformation($"Transformed {result.Input.FilePath} ({result.Input.FileIndex}).");
             }, new ExecutionDataflowBlockOptions
             {
                 CancellationToken = cancellationToken,
@@ -59,6 +60,9 @@ namespace ImageObjectRecognizer.Services
 
             // Wait for pipeline to drain
             await writer.Completion;
+
+            Console.WriteLine("Finished. Press any key to exit.");
+            Console.ReadKey();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -73,6 +77,8 @@ namespace ImageObjectRecognizer.Services
                 target.Post(new Input(file, ++_queuedFiles));
                 _logger.LogInformation($"Queued {file} ({_queuedFiles})");
             }
+
+            _logger.LogInformation($"Total # files queued: {_queuedFiles}");
         }
     }
 }

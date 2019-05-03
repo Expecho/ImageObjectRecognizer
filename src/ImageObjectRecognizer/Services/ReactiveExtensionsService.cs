@@ -17,7 +17,7 @@ namespace ImageObjectRecognizer.Services
         private readonly ILogger<ReactiveExtensionsService> _logger;
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
-        private readonly  Subject<Input> _fileSubject = new Subject<Input>();
+        private readonly Subject<Input> _fileSubject = new Subject<Input>();
         private int _queuedFiles;
 
         public ReactiveExtensionsService(ILogger<ReactiveExtensionsService> logger, IOptions<Configuration> configuration, IResultWriter resultWriter)
@@ -40,7 +40,11 @@ namespace ImageObjectRecognizer.Services
                         .Delay(TimeSpan.FromSeconds(1))
                         .Concat(Observable.FromAsync(() => recognizer.RecognizeAsync(input))))
                 .Merge(10)
-                .Subscribe(async result => { await _resultWriter.PersistResultAsync(result); }, e => tcs.TrySetResult(e),
+                .Subscribe(async result =>
+                    {
+                        await _resultWriter.PersistResultAsync(result);
+                        _logger.LogInformation($"Transformed {result.Input.FilePath} ({result.Input.FileIndex}).");
+                    }, e => tcs.TrySetResult(e),
                     () => tcs.TrySetResult(null)))
             {
                 // Start the producer
@@ -48,8 +52,9 @@ namespace ImageObjectRecognizer.Services
                     SearchOption.TopDirectoryOnly))
                 {
                     _fileSubject.OnNext(new Input(file, ++_queuedFiles));
-                    _logger.LogInformation($"Queued {file}");
+                    _logger.LogInformation($"Queued {file} ({_queuedFiles})");
                 }
+                _logger.LogInformation($"Total # files queued: {_queuedFiles}");
 
                 // Signal completion of producer
                 _fileSubject.OnCompleted();
@@ -57,9 +62,12 @@ namespace ImageObjectRecognizer.Services
                 // Wait for pipeline to drain
                 var exception = await tcs.Task;
                 if (exception != null)
-                    throw exception;
+                    _logger.LogError(exception, exception.Message);
+
+                Console.WriteLine("Finished. Press any key to exit.");
+                Console.ReadKey();
             }
-       }
+        }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {

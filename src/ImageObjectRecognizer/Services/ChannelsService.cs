@@ -49,6 +49,9 @@ namespace ImageObjectRecognizer.Services
 
             // Wait for pipeline to drain
             await processingTask;
+
+            Console.WriteLine("Finished. Press any key to exit.");
+            Console.ReadKey();
         }
 
         private async Task ProcessQueuedFilesAsync(ChannelReader<Input> pipeline, CancellationToken cancellationToken)
@@ -67,9 +70,19 @@ namespace ImageObjectRecognizer.Services
         private async Task ProcessQueuedFileAsync(Input input)
         {
             _logger.LogInformation($"Transforming {input.FilePath} ({input.FileIndex}).");
-            var result = await _recognizer.RecognizeAsync(input);
 
-            await _resultWriter.PersistResultAsync(result);
+            try
+            {
+                var result = await _recognizer.RecognizeAsync(input);
+
+                await _resultWriter.PersistResultAsync(result);
+
+                _logger.LogInformation($"Transformed {result.Input.FilePath} ({result.Input.FileIndex}).");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error processing {input.FilePath} ({input.FileIndex}): {e.Message}");
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -88,6 +101,8 @@ namespace ImageObjectRecognizer.Services
 
                 _logger.LogInformation($"Queued {file} ({_queuedFiles})");
             }
+
+            _logger.LogInformation($"Total # files queued: {_queuedFiles}");
         }
     }
 }

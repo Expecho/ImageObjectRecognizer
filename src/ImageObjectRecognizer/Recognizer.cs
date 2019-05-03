@@ -37,8 +37,8 @@ namespace ImageObjectRecognizer
                 _logger.LogInformation($"Sending for analysis: {input.FilePath}");
 
                 return new Result(
-                    input, 
-                    await _computerVision.AnalyzeImageInStreamAsync(imageStream, Features));
+                        input,
+                        await _computerVision.AnalyzeImageInStreamAsync(imageStream, Features));
             }
         }
     }

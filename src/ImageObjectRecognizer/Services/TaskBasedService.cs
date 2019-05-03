@@ -37,14 +37,29 @@ namespace ImageObjectRecognizer.Services
                 _logger.LogInformation($"Queued {file} ({_queuedFiles})");
             }
 
+            _logger.LogInformation($"Total # files queued: {_queuedFiles}");
+
             // Wait for process to complete
             await Task.WhenAll(tasks);
-            
+
+            Console.WriteLine("Finished. Press any key to exit.");
+            Console.ReadKey();
+
             // Set up the consumer
             async Task CreateWorker(Input input)
             {
-                var result = await recognizer.RecognizeAsync(input);
-                await _resultWriter.PersistResultAsync(result);
+                _logger.LogInformation($"Transforming {input.FilePath} ({input.FileIndex}).");
+
+                try
+                {
+                    var result = await recognizer.RecognizeAsync(input);
+                    await _resultWriter.PersistResultAsync(result);
+                    _logger.LogInformation($"Transformed {result.Input.FilePath} ({result.Input.FileIndex}).");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error processing {input.FilePath} ({input.FileIndex}): {e.Message}");
+                }
             }
         }
 

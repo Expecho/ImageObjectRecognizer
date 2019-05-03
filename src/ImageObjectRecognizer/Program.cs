@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace ImageObjectRecognizer
 {
 
-    internal static class Program
+    internal class Program
     {
         public static async Task Main(string[] args)
         {
@@ -21,6 +21,11 @@ namespace ImageObjectRecognizer
                   if (args != null)
                   {
                       config.AddCommandLine(args);
+                  }
+
+                  if (hostingContext.HostingEnvironment.IsDevelopment())
+                  {
+                      config.AddUserSecrets<Program>();
                   }
               })
               .ConfigureServices((hostContext, services) =>
@@ -37,6 +42,7 @@ namespace ImageObjectRecognizer
               {
                   logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                   logging.AddConsole();
+                  logging.AddDebug();
               });
 
             await builder.RunConsoleAsync();

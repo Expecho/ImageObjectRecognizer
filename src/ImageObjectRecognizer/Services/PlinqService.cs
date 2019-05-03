@@ -35,12 +35,27 @@ namespace ImageObjectRecognizer.Services
                 .WithDegreeOfParallelism(10)
                 .ForAll(file => CreateWorker(new Input(file, ++_queuedFiles)).GetAwaiter().GetResult());
 
+            _logger.LogInformation($"Total # files queued: {_queuedFiles}");
+
             async Task CreateWorker(Input input)
             {
                 _logger.LogInformation($"Queued {input.FilePath} ({_queuedFiles})");
-                var result = await recognizer.RecognizeAsync(input);
-                await _resultWriter.PersistResultAsync(result);
+
+                try
+                {
+                    var result = await recognizer.RecognizeAsync(input);
+                    await _resultWriter.PersistResultAsync(result);
+
+                    _logger.LogInformation($"Transformed {result.Input.FilePath} ({result.Input.FileIndex}).");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error processing {input.FilePath} ({input.FileIndex}): {e.Message}");
+                }
             }
+
+            Console.WriteLine("Finished. Press any key to exit.");
+            Console.ReadKey();
 
             return Task.CompletedTask;
         }
