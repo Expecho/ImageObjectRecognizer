@@ -32,7 +32,7 @@ namespace ImageObjectRecognizer.Services
             _recognizer = new Recognizer(_logger, _configuration);
 
             // Set up pipeline
-            var pipeline = new BlockingCollection<Input>(boundedCapacity: 100);
+            var pipeline = new BlockingCollection<Input>(boundedCapacity: 10);
 
             // Start the consumer
             var processingTask = ProcessQueuedFilesAsync(pipeline, cancellationToken);

@@ -14,6 +14,7 @@ namespace ImageObjectRecognizer.Services
     internal class TaskBasedService : IHostedService
     {
         private readonly ILogger<TaskBasedService> _logger;
+        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(5);
         private readonly IOptions<Configuration> _configuration;
         private readonly IResultWriter _resultWriter;
         private int _queuedFiles;
@@ -48,6 +49,8 @@ namespace ImageObjectRecognizer.Services
             // Set up the consumer
             async Task CreateWorker(Input input)
             {
+                await _semaphoreSlim.WaitAsync();
+
                 _logger.LogInformation($"Transforming {input.FilePath} ({input.FileIndex}).");
 
                 try
@@ -59,6 +62,10 @@ namespace ImageObjectRecognizer.Services
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Error processing {input.FilePath} ({input.FileIndex}): {e.Message}");
+                }
+                finally
+                {
+                    _semaphoreSlim.Release();
                 }
             }
         }
