@@ -8,7 +8,7 @@ The application will loop recursively through all directories in the path specif
 
 The main purpose of this repository is not the tool itself, but the demonstration of several ways to call the [rate limited api](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/computer-vision/) using multithreading techniques. When calls have to be throttled, backpressure has to be applied to the producer in a producer/consumer scenario. There are several implementations of the producer/consumer scenario in this repository:
 
-The current implemetations are based on the S1 pricing tier that allows for 10 calls per second to the computer vision api.
+The current implementations are based on the S1 pricing tier that allows for 10 calls per second to the computer vision api.
 
 |Technique|Description|
 |---|---|
