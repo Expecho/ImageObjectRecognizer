@@ -42,7 +42,7 @@ namespace ImageObjectRecognizer.Services
             var processingTask = ProcessQueuedFilesAsync(pipeline.Reader, cancellationToken);
 
             // Start producing data
-            await QueueImageFilesAsync(_configuration.Value.Path, pipeline.Writer);
+            await QueueImageFilesAsync(_configuration.Value.ImagesPath, pipeline.Writer);
 
             // Signal producer completion
             pipeline.Writer.Complete();

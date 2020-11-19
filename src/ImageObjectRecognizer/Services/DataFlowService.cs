@@ -53,7 +53,7 @@ namespace ImageObjectRecognizer.Services
             transformer.LinkTo(writer, new DataflowLinkOptions { PropagateCompletion = true });
 
             // Start the producer
-            QueueImageFiles(_configuration.Value.Path, transformer);
+            QueueImageFiles(_configuration.Value.ImagesPath, transformer);
 
             // Signal completion
             transformer.Complete();

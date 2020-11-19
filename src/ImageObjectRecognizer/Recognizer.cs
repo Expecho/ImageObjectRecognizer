@@ -14,7 +14,7 @@ namespace ImageObjectRecognizer
         private readonly ILogger _logger;
         private readonly ComputerVisionClient _computerVision;
 
-        private static readonly List<VisualFeatureTypes> Features = new List<VisualFeatureTypes>
+        private static readonly List<VisualFeatureTypes?> Features = new List<VisualFeatureTypes?>
         {
             VisualFeatureTypes.Description,
             VisualFeatureTypes.Tags

@@ -48,7 +48,7 @@ namespace ImageObjectRecognizer.Services
                     () => tcs.TrySetResult(null)))
             {
                 // Start the producer
-                foreach (var file in Directory.EnumerateFiles(_configuration.Value.Path, "*.jpg",
+                foreach (var file in Directory.EnumerateFiles(_configuration.Value.ImagesPath, "*.jpg",
                     SearchOption.TopDirectoryOnly))
                 {
                     _fileSubject.OnNext(new Input(file, ++_queuedFiles));

@@ -32,7 +32,7 @@ namespace ImageObjectRecognizer.Services
             var tasks = new List<Task>();
 
             // Start the producer
-            foreach (var file in Directory.EnumerateFiles(_configuration.Value.Path, "*.jpg", SearchOption.TopDirectoryOnly))
+            foreach (var file in Directory.EnumerateFiles(_configuration.Value.ImagesPath, "*.jpg", SearchOption.TopDirectoryOnly))
             {
                 tasks.Add(CreateWorker(new Input(file, ++_queuedFiles)));
                 _logger.LogInformation($"Queued {file} ({_queuedFiles})");

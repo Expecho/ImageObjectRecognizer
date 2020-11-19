@@ -30,7 +30,7 @@ namespace ImageObjectRecognizer.Services
             var recognizer = new Recognizer(_logger, _configuration);
 
             Directory
-                .EnumerateFiles(_configuration.Value.Path, "*.jpg", SearchOption.TopDirectoryOnly)
+                .EnumerateFiles(_configuration.Value.ImagesPath, "*.jpg", SearchOption.TopDirectoryOnly)
                 .AsParallel()
                 .WithDegreeOfParallelism(10)
                 .ForAll(file => CreateWorker(new Input(file, ++_queuedFiles)).GetAwaiter().GetResult());
